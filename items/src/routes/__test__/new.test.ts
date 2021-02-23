@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { app } from '../../app';
+import { Item } from '../../models/item';
 
 it('Has a router handler listening to /api/items for post requests', async () => {
   const response = await request(app).post('/api/items').send({});
@@ -51,12 +52,23 @@ it('Returns an error if an invalid price is provided', async () => {
 
 it('Creates a new item with valid request', async () => {
   // Add check to ensure item was saved.
+  let items = await Item.find({});
+  expect(items.length).toEqual(0);
+  const title = 'Title Goes Here';
+  const price = 100;
 
   await request(app)
     .post('/api/items')
+    .set('Cookie', global.signin())
     .send({
-      title: 'Title Goes Here',
-      price: 100,
+      title: title,
+      price: price,
     })
+
     .expect(201);
+
+  items = await Item.find({});
+  expect(items.length).toEqual(1);
+  expect(items[0].title).toEqual(title);
+  expect(items[0].price).toEqual(price);
 });

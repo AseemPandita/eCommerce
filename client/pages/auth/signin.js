@@ -24,8 +24,7 @@ const signin = () => {
   return (
     <form onSubmit={onSubmit}>
       {errors}
-
-      <h1>Sign in</h1>
+      <h3>Sign in</h3>
       <div className='form-group'>
         <label>Email Address</label>
         <input
