@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: items-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: items
+  template:
+    metadata:
+      labels:
+        app: items
+    spec:
+      containers:
+        - name: items
+          image: aseempandita/items
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://items-mongo-srv:27017/items'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: items-srv
+spec:
+  selector:
+    app: items
+  ports:
+    - name: items
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
