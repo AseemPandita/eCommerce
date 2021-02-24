@@ -1,6 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('Returns 404 if item id does not exist', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -98,4 +99,31 @@ it('Updates item if input is valid', async () => {
 
   expect(itemResponse.body.title).toEqual('Updated Title');
   expect(itemResponse.body.price).toEqual(10000);
+});
+
+it('Publishes if item is updated', async () => {
+  const cookie = global.signin();
+
+  const response = await request(app)
+    .post(`/api/items/`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'Title Goes Here',
+      price: 20,
+    });
+
+  await request(app)
+    .put(`/api/items/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'Updated Title',
+      price: 10000,
+    })
+    .expect(200);
+
+  const itemResponse = await request(app)
+    .get(`/api/items/${response.body.id}`)
+    .send();
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
