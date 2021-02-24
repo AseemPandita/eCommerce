@@ -8,7 +8,7 @@ interface ItemAttrs {
 
 interface ItemDoc extends mongoose.Document {
   title: string;
-  price: string;
+  price: number;
   userId: string;
 }
 
