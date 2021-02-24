@@ -4,7 +4,9 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import { errorHandler, NotFoundError, currentUser } from '@pandita/common';
 
-import { CreateItemRouter } from './routes/new';
+import { createItemRouter } from './routes/new';
+import { showItemRouter } from './routes/show';
+import { indexItemRouter } from './routes/index';
 
 const app = express();
 app.set('trust proxy', true);
@@ -18,7 +20,9 @@ app.use(
 
 app.use(currentUser);
 
-app.use(CreateItemRouter);
+app.use(createItemRouter);
+app.use(showItemRouter);
+app.use(indexItemRouter);
 
 app.all('*', async (req, res, next) => {
   throw new NotFoundError();

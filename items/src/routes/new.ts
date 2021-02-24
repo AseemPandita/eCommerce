@@ -28,4 +28,4 @@ router.post(
   }
 );
 
-export { router as CreateItemRouter };
+export { router as createItemRouter };
