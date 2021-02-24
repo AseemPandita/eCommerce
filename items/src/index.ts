@@ -9,9 +9,22 @@ const start = async () => {
   if (!process.env.MONGO_URI) {
     throw new Error('Cannot load MONGO_URI');
   }
+  if (!process.env.NATS_CLIENT_ID) {
+    throw new Error('Cannot load NATS_CLIENT_ID');
+  }
+  if (!process.env.NATS_URL) {
+    throw new Error('Cannot load NATS_URL');
+  }
+  if (!process.env.NATS_CLUSTER_ID) {
+    throw new Error('Cannot load NATS_CLUSTER_ID');
+  }
 
   try {
-    await natsWrapper.connect('items', 'asd', 'http://nats-srv:4222');
+    await natsWrapper.connect(
+      process.env.NATS_CLUSTER_ID,
+      process.env.NATS_CLIENT_ID,
+      process.env.NATS_URL
+    );
     natsWrapper.client.on('close', () => {
       console.log('NATS connection closed.');
       process.exit();
