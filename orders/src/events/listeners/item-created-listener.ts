@@ -8,8 +8,9 @@ export class ItemCreatedListener extends Listener<ItemCreatedEvent> {
   queGroupName = queueGroupName;
 
   async onMessage(data: ItemCreatedEvent['data'], msg: Message) {
-    const { title, price } = data;
+    const { id, title, price } = data;
     const item = Item.build({
+      id,
       title,
       price,
     });
