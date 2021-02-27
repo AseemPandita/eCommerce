@@ -1,7 +1,5 @@
 import request from 'supertest';
 import { app } from '../../app';
-import mongoose from 'mongoose';
-import { Order, OrderStatus } from '../../models/orders';
 import { Item } from '../../models/item';
 
 const buildItem = async () => {
