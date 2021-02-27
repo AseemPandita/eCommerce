@@ -3,6 +3,7 @@ import { app } from '../../app';
 import mongoose from 'mongoose';
 import { Order, OrderStatus } from '../../models/orders';
 import { Item } from '../../models/item';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('return error if item does not exist', async () => {
   const itemId = mongoose.Types.ObjectId();
@@ -60,4 +61,20 @@ it('reserves item ', async () => {
     .expect(201);
 });
 
-it.todo('emits the event');
+it('emits the event', async () => {
+  // Save item to DB
+  const item = Item.build({
+    title: 'New title',
+    price: 20,
+  });
+  await item.save();
+
+  // try creating an order with the reserved item
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin())
+    .send({ itemId: item.id })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
