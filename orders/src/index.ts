@@ -37,12 +37,12 @@ const start = async () => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
-    console.log('Connected to Mongo DB [/items]');
+    console.log('Connected to Mongo DB [/orders]');
   } catch (err) {
     console.error(err);
   }
   app.listen(3000, () => {
-    console.log('Items microservice listening on port 3000 using skaffold...');
+    console.log('Orders microservice listening on port 3000 using skaffold...');
   });
 };
 
