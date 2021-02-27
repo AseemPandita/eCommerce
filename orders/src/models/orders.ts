@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 import { OrderStatus } from '@pandita/common';
 import { ItemDoc } from './item';
 
+export { OrderStatus };
+
 interface orderAttrs {
   userId: string;
   status: OrderStatus;
