@@ -1,15 +1,17 @@
 import mongoose from 'mongoose';
+import { OrderStatus } from '@pandita/common';
+import { ItemDoc } from './item';
 
 interface orderAttrs {
   userId: string;
-  status: string;
+  status: OrderStatus;
   expiresAt: Date;
   item: ItemDoc;
 }
 
 interface OrderDoc extends mongoose.Document {
   userId: string;
-  status: string;
+  status: OrderStatus;
   expiresAt: Date;
   item: ItemDoc;
 }
@@ -27,6 +29,8 @@ const orderSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
+      enum: Object.values(OrderStatus),
+      default: OrderStatus.Created,
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,
