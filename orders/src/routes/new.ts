@@ -13,7 +13,7 @@ router.post(
       .not()
       .isEmpty()
       .custom((input: string) => mongoose.Types.ObjectId.isValid(input))
-      .withMessage('Ticket must be provided'),
+      .withMessage('itemId must be provided'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
