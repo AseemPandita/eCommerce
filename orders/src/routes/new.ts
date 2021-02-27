@@ -16,7 +16,7 @@ const router = express.Router();
 const EXPIRATION_WINDOW_SECONDS = 15 * 60;
 
 router.post(
-  'api/orders',
+  '/api/orders',
   requireAuth,
   [
     body('itemId')
@@ -29,19 +29,19 @@ router.post(
   async (req: Request, res: Response) => {
     const { itemId } = req.body;
 
-    // Find the ticket user is trying to purchase
+    // Find the item user is trying to purchase
     const item = await Item.findById(itemId);
     if (!item) {
       throw new NotFoundError();
     }
 
-    // Ticket should not be already purchased
+    // item should not be already purchased
     const isReserved = await item.isReserved();
     if (isReserved) {
-      throw new BadRequestError('Ticket is already reserved');
+      throw new BadRequestError('Item is already reserved');
     }
 
-    // Calculate expiration for ticket purchase
+    // Calculate expiration for item purchase
     const expiration = new Date();
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
