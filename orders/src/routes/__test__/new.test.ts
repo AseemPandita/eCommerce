@@ -31,10 +31,10 @@ it('return error if item already reserved', async () => {
   });
   await order.save();
 
-  const existingItem = await Item.findById(item.id);
-  console.log('Item', existingItem!.id);
-  const isReserved = await item.isReserved();
-  console.log('Is the item reserved?: ', isReserved);
+  // const existingItem = await Item.findById(item.id);
+  // console.log('Item', existingItem!.id);
+  // const isReserved = await item.isReserved();
+  // console.log('Is the item reserved?: ', isReserved);
 
   // try creating an order with the reserved item
   await request(app)
@@ -59,3 +59,5 @@ it('reserves item ', async () => {
     .send({ itemId: item.id })
     .expect(201);
 });
+
+it.todo('emits the event');
