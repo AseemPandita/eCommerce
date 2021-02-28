@@ -1,10 +1,13 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Item } from '../../models/item';
+import mongoose from 'mongoose';
 
 it('fetches the order', async () => {
   // create an item
   const item = Item.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+
     title: 'Concert Ticket',
     price: 20,
   });
@@ -31,6 +34,8 @@ it('fetches the order', async () => {
 it('returns error when user is not authorized', async () => {
   // create an item
   const item = Item.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+
     title: 'Concert Ticket',
     price: 20,
   });

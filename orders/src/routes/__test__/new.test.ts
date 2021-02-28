@@ -18,6 +18,8 @@ it('return error if item does not exist', async () => {
 it('return error if item already reserved', async () => {
   // Save item to DB
   const item = Item.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+
     title: 'New title',
     price: 20,
   });
@@ -48,6 +50,8 @@ it('return error if item already reserved', async () => {
 it('reserves item ', async () => {
   // Save item to DB
   const item = Item.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+
     title: 'New title',
     price: 20,
   });
@@ -64,6 +68,8 @@ it('reserves item ', async () => {
 it('emits the event', async () => {
   // Save item to DB
   const item = Item.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+
     title: 'New title',
     price: 20,
   });
