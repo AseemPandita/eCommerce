@@ -52,3 +52,9 @@ it('ack', async () => {
 
   expect(msg.ack).toHaveBeenCalled();
 });
+
+it('publishes item updated event', async () => {
+  const { listener, item, data, msg } = await setup();
+
+  await listener.onMessage(data, msg);
+});
