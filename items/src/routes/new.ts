@@ -31,6 +31,7 @@ router.post(
       title: item.title,
       price: item.price,
       userId: item.userId,
+      version: item.version,
     });
 
     res.status(201).send(item);
