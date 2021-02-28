@@ -8,7 +8,7 @@ export class ItemUpdatedListener extends Listener<ItemUpdatedEvent> {
   queGroupName = queueGroupName;
 
   async onMessage(data: ItemUpdatedEvent['data'], msg: Message) {
-    const item = await Item.findById(data.id);
+    const item = await Item.findByEvent(data);
 
     if (!item) {
       throw new Error('Item not found');

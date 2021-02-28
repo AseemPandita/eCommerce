@@ -62,6 +62,8 @@ router.post(
       status: order.status,
       userId: order.userId,
       expiresAt: order.expiresAt.toISOString(),
+      // temp fix
+      version: order.__v!,
       item: {
         id: item.id,
         price: item.price,
