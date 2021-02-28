@@ -2,6 +2,7 @@ import { Listener, OrderCreatedEvent, Subjects } from '@pandita/common';
 import { queueGroupName } from './queue-group-name';
 import { Message } from 'node-nats-streaming';
 import { Item } from '../../models/item';
+import { ItemUpdatedPublisher } from '../publishers/item-updated-publisher';
 
 export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   subject: Subjects.OrderCreated = Subjects.OrderCreated;
@@ -21,6 +22,14 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
 
     // Save
     await item.save();
+    await new ItemUpdatedPublisher(this.client).publish({
+      id: item.id,
+      price: item.price,
+      title: item.title,
+      userId: item.userId,
+      orderId: item.orderId,
+      version: item.version,
+    });
 
     // Ack
     msg.ack();
