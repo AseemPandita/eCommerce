@@ -5,6 +5,7 @@ import {
   NotAuthorizedError,
   requireAuth,
   NotFoundError,
+  BadRequestError,
 } from '@pandita/common';
 import { Item } from '../models/item';
 import { ItemUpdatedPublisher } from '../events/publishers/item-updated-publisher';
@@ -27,6 +28,10 @@ router.put(
 
     if (!item) {
       throw new NotFoundError();
+    }
+
+    if (item.orderId) {
+      throw new BadRequestError('Cannot edit reserved Item');
     }
 
     if (item.userId !== req.currentUser!.id) {

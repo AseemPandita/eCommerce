@@ -2,6 +2,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import mongoose from 'mongoose';
 import { natsWrapper } from '../../nats-wrapper';
+import { Item } from '../../models/item';
 
 it('Returns 404 if item id does not exist', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -126,4 +127,29 @@ it('Publishes if item is updated', async () => {
     .send();
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
+});
+
+it('rejects updates to reserved items', async () => {
+  const cookie = global.signin();
+
+  const response = await request(app)
+    .post(`/api/items/`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'Title Goes Here',
+      price: 20,
+    });
+
+  const item = await Item.findById(response.body.id);
+  item!.set({ orderId: mongoose.Types.ObjectId().toHexString() });
+  await item!.save();
+
+  await request(app)
+    .put(`/api/items/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'Updated Title',
+      price: 10000,
+    })
+    .expect(400);
 });
