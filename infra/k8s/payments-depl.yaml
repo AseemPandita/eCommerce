@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: items-depl
+  name: payments-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: items
+      app: payments
   template:
     metadata:
       labels:
-        app: items
+        app: payments
     spec:
       containers:
-        - name: items
-          image: aseempandita/items
+        - name: payments
+          image: aseempandita/payments
           env:
             - name: NATS_CLIENT_ID
               valueFrom:
@@ -25,7 +25,7 @@ spec:
             - name: NATS_CLUSTER_ID
               value: items
             - name: MONGO_URI
-              value: 'mongodb://items-mongo-srv:27017/items'
+              value: 'mongodb://payments-mongo-srv:27017/payments'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -35,12 +35,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: items-srv
+  name: payments-srv
 spec:
   selector:
-    app: items
+    app: payments
   ports:
-    - name: items
+    - name: payments
       protocol: TCP
       port: 3000
       targetPort: 3000
